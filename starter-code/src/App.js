@@ -23,14 +23,20 @@ class App extends Component {
   state = {
     allFoods: foods,
     filteredFoods: foods,   // the original value fo filteredFoods is going to be the original array in foods.json
-    showForm: false
+    showForm: false,
+    todaysFood: [],
+    totalCalories: 0,
   }
+
+  // function newFunc(parameterName){
+
+  // }
 
   displayFood = () => {
     let copyOfAllFoods = this.state.filteredFoods.map((eachFood, index) => {
       // console.log(eachFood)
       // return(<FoodBox name={eachFood.name} calories={eachFood.calories} image={eachFood.image}/>)
-      return(<FoodBox key={eachFood.name} {...eachFood}/>)
+      return(<FoodBox key={eachFood.name} {...eachFood} addFoodToTodaysList={this.addFoodToTodaysList}/>)
     })
     // eachFood= {
     //   name: "pizza",
@@ -76,6 +82,49 @@ class App extends Component {
     })
   }
 
+  // Wise words of Stefan
+  // func() is a function invocation - this will get called right away
+  // () => func() is a function reference - this will get called when something (example an event) happens 
+  addFoodToTodaysList = (name, calories, quantity) => {
+    // console.log(name, calories, quantity)
+    // console.log("Hi mom")
+    let foodObj = {
+      nameKey: name,
+      caloriesKey: calories,
+      quantityKey: Number(quantity)
+      // could have used the same parameter name as the object key name and then it would look like this
+      // let foodObj = {name, calories, quantity}
+    }
+    let todaysFoodCopy = [...this.state.todaysFood] // copy the array from state
+    todaysFoodCopy.push(foodObj) // push food object to the array
+    // console.log(todaysFoodCopy)
+    this.setState({
+      todaysFood: todaysFoodCopy
+    })
+  }
+
+  displayTodaysFood = () => {
+    console.log(this.state.todaysFood)
+    let todaysFoodCopy = this.state.todaysFood.map((eachFood, index) => {
+      return(<li key={index}>{eachFood.quantityKey} {eachFood.nameKey} = {eachFood.caloriesKey * eachFood.quantityKey} calories </li>)
+    })
+
+    return todaysFoodCopy;
+  }
+  // let array1 = [1, 2, 3, 4];
+  // let total = array1.reduce((accumulator, currentValue) => {
+  // console.log(accumulator + " += " + currentValue)
+  // return accumulator + currentValue}, 0);
+  // console.log("Final ", total);
+
+  calculateTotalCalories = () => {
+
+    let total = this.state.todaysFood.reduce((accumulator, eachFood) => {
+    return accumulator + (eachFood.quantityKey * eachFood.caloriesKey)}, 0);
+      console.log(total)
+    return total
+  }
+ 
   render() {
     return (
       <div className="App">
@@ -84,7 +133,11 @@ class App extends Component {
           Add Food
         </button>
         {/* if(true && true) {show the form }  if(false && true) {do not show form}*/}
-        {this.state.showForm && <FoodForm addNewFoodToArray={this.addNewFoodToArray}/>}  
+        {this.state.showForm && <FoodForm addNewFoodToArray={this.addNewFoodToArray}/>}
+        <ul>
+        {this.displayTodaysFood()}
+        <p>Total = {this.calculateTotalCalories()} calories</p>  
+        </ul>  
         {this.displayFood()}
       </div>
     );

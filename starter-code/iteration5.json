@@ -1,0 +1,13 @@
+[{
+  "steps": [
+    "add onChange event to input element of quantity", 
+    "create a handleQuantityChange function inside foodBox.jsx", 
+    "in handleQuantityChange we set the state to whatever quantity was entered", 
+    "add onClick event to the + button and it will call a function in App.js", 
+    "in App.js made the function that will be called when the + button is clicked", 
+    "pass the new function to FoodBox as a prop", 
+    "Now we need to make a function in App.js that will add the food selected to an array and then another function to display the array", 
+    "In App.js add a new function that uses reduce to calculate the total, the function should return a number", 
+    "call the function in the return of App.js to display the total calories"
+  ]
+}]
